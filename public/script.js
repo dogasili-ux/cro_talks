@@ -1,9 +1,14 @@
 const socket = io('/');
 const videoGrid = document.getElementById('video-grid');
-const myPeer = new Peer(undefined, { 
-  path: '/peerjs', 
-  host: location.hostname, 
-  port: location.port || (location.protocol === 'https:' ? 443 : 80)
+// PeerJS Bulut Sunucusu ve Google STUN Sunucuları
+const myPeer = new Peer(undefined, {
+  config: {
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:global.stun.twilio.com:3478' }
+    ]
+  }
+  // host, port ve path satırlarını SİLDİK. Artık otomatiğe bağlandı.
 });
 
 let myVideoStream;
@@ -167,4 +172,5 @@ socket.on("createMessage", (message, senderName) => {
   // Otomatik aşağı kaydır
   let window = document.querySelector(".chat-window");
   window.scrollTop = window.scrollHeight;
+
 });
