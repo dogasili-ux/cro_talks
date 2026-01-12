@@ -5,7 +5,16 @@ const io = require('socket.io')(server);
 const { v4: uuidv4 } = require('uuid');
 const { ExpressPeerServer } = require('peer');
 
-const peerServer = ExpressPeerServer(server, { debug: true });
+// PeerJS Bulut Sunucusu ve Google STUN Sunucuları
+const myPeer = new Peer(undefined, {
+  config: {
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:global.stun.twilio.com:3478' }
+    ]
+  }
+  // host, port ve path satırlarını SİLDİK. Artık otomatiğe bağlandı.
+});
 
 app.use('/peerjs', peerServer);
 app.set('view engine', 'ejs');
@@ -38,4 +47,5 @@ io.on('connection', socket => {
 
 server.listen(process.env.PORT || 3000, () => {
   console.log('Sunucu çalışıyor.');
+
 });
